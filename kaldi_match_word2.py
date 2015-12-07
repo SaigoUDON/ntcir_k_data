@@ -44,7 +44,7 @@ if __name__=="__main__":
 	f = open("test.txt","w")
 
 	'スライドがどこまでか書く'
-	slide_classify = get_file_contents("/home/seko/ntcir11/data/a1")
+	slide_classify = get_file_contents("/home/seko/ntcir11/ntcir_k_data/data/a1")
 	# print slide_classify[1]#slide_classify[a] a:07-01.align,08-21.align
 	# print len(slide_classify)
 	print "スライド範囲の取得"
@@ -83,7 +83,7 @@ if __name__=="__main__":
 	'スライドの内容'
 	name = []
 	date = []
-	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/data/kaldi_file1")
+	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/ntcir_k_data/data/kaldi_file1")
 	# print date[-1]
 	# print len(name[0])
 	# print len(slide_sentence[0])
@@ -181,4 +181,4 @@ if __name__=="__main__":
 	# 	m+=1
 
 	#フォルダを削除する
-	remove_none_file("/home/seko/ntcir11/program/kaldi_data/")
+	remove_none_file("/home/seko/ntcir11/ntcir_k_data/kaldi_data/")
