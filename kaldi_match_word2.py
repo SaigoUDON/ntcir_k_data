@@ -44,7 +44,7 @@ if __name__=="__main__":
 	f = open("test.txt","w")
 
 	'スライドがどこまでか書く'
-	slide_classify = get_file_contents("/home/seko/ntcir11/ntcir_k_data/data/a1")
+	slide_classify = get_file_contents("/home/seko/ntcir11/ntcir_k_data/data/a")
 	# print slide_classify[1]#slide_classify[a] a:07-01.align,08-21.align
 	# print len(slide_classify)
 	print "スライド範囲の取得"
@@ -83,7 +83,7 @@ if __name__=="__main__":
 	'スライドの内容'
 	name = []
 	date = []
-	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/ntcir_k_data/data/kaldi_file1")
+	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/ntcir_k_data/data/kaldi_file")
 	# print date[-1]
 	# print len(name[0])
 	# print len(slide_sentence[0])
@@ -133,7 +133,7 @@ if __name__=="__main__":
 						# print "j",j,"pre",pre
 						continue
 
-				elif slide_range[di][i+1][1] == re.search('\d{4}',name[di][j]).group(0) or re.search('\+',slide_range[di][i+1][1]):#この範囲の時に貯めていたものを吐き出す
+				elif slide_range[di][i+1][1] >= re.search('\d{4}',name[di][j]).group(0) or re.search('\+',slide_range[di][i+1][1]):#この範囲の時に貯めていたものを吐き出す
 					slide_tmp.append(punctuation)
 					punctuation = []
 					pre = j
@@ -152,33 +152,34 @@ if __name__=="__main__":
 	# print "slide_num",len(slide)
 
 	print "スライド文書の作成終了"
-	print len(slide[0]),len(slide[1]),len(slide[2])
+	for i in range(len(slide)):
+		print len(slide[i])
 	# for i in range(len(slide[-1][-1])):
 		# print slide[-1][-2][i]
 
-#保存のところ(一度実行したら二度目はKALDI_DATAを消してからにしてください)
-	# out_num=plus_one_flag
-	# m=0
-	# # print len(slide)
-	# # print len(slide[1][28])
-	# # print len(slide[0]),len(slide[1]),len(slide[2])
-	# for di in range(len(slide)):#日付文
-	# 	print len(slide[di])
-	# 	for i in range(len(slide[di])):#スライド文
-	# 		# f.write("{0:03d}".format(out_num))
-	# 		for j in range(len(slide[di][i])):#一スライドの中の細かい文
-	# 			if len(slide[di][i][j]) == 0: #スライドが空だった場合
-	# 				# print i
-	# 				continue
-	# 			else:
-	# 				dir_name = "/home/seko/ntcir11/program/kaldi_data/"+date[m]+"_"+'{0:03d}'.format(out_num)
-	# 				f = open(dir_name+"kaldi.txt","aw")
-	# 				f.write(str(slide[di][i][j]))
-	# 				f.write("\n")
-	# 			# print slide[i][j]
-	# 		out_num+=1
-	# 	out_num=plus_one_flag
-	# 	m+=1
+# 保存のところ(一度実行したら二度目はKALDI_DATAを消してからにしてください)
+	out_num=plus_one_flag
+	m=0
+	# print len(slide)
+	# print len(slide[1][28])
+	# print len(slide[0]),len(slide[1]),len(slide[2])
+	for di in range(len(slide)):#日付文
+		print len(slide[di])
+		for i in range(len(slide[di])):#スライド文
+			# f.write("{0:03d}".format(out_num))
+			for j in range(len(slide[di][i])):#一スライドの中の細かい文
+				if len(slide[di][i][j]) == 0: #スライドが空だった場合
+					# print i
+					continue
+				else:
+					dir_name = "/home/seko/ntcir11/ntcir_k_data/data/kaldi_data/"+date[m]+"_"+'{0:03d}'.format(out_num)
+					f = open(dir_name+"kaldi.txt","aw")
+					f.write(str(slide[di][i][j]))
+					f.write("\n")
+				# print slide[i][j]
+			out_num+=1
+		out_num=plus_one_flag
+		m+=1
 
 	#フォルダを削除する
-	remove_none_file("/home/seko/ntcir11/ntcir_k_data/kaldi_data/")
+	remove_none_file("/home/seko/ntcir11/ntcir_k_data/data/kaldi_data/")
