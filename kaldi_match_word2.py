@@ -44,7 +44,7 @@ if __name__=="__main__":
 	f = open("test.txt","w")
 
 	'スライドがどこまでか書く'
-	slide_classify = get_file_contents("/home/seko/ntcir11/ntcir_k_data/data/a")
+	slide_classify = get_file_contents("/home/seko/ntcir11/ntcir_k_data/data/a1")
 	# print slide_classify[1]#slide_classify[a] a:07-01.align,08-21.align
 	# print len(slide_classify)
 	print "スライド範囲の取得"
@@ -74,6 +74,9 @@ if __name__=="__main__":
 			slide_range_tmp.append(slide_classify_num[di][i].split(" "))
 		slide_range.append(slide_range_tmp)
 		slide_range_tmp = []
+	for i in range(len(slide_range)):
+		print len(slide_range[i])-1
+
 	print "スライドに渡す形に範囲を変換"
 	print slide_range[0][1][1]#slide_range[a][b][c] a:07-01.align,08-21.align b:1 0000,2 0004,c:0=左、1＝右
 	# # print int(slide_range[35][1]),len(slide_range)
@@ -83,7 +86,7 @@ if __name__=="__main__":
 	'スライドの内容'
 	name = []
 	date = []
-	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/ntcir_k_data/data/kaldi_file")
+	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/ntcir_k_data/data/kaldi_file1")
 	# print date[-1]
 	# print len(name[0])
 	# print len(slide_sentence[0])
@@ -132,14 +135,19 @@ if __name__=="__main__":
 					else:
 						# print "j",j,"pre",pre
 						continue
-
-				elif slide_range[di][i+1][1] >= re.search('\d{4}',name[di][j]).group(0) or re.search('\+',slide_range[di][i+1][1]):#この範囲の時に貯めていたものを吐き出す
+				elif re.search('\+',slide_range[di][i+1][1]) and re.search('\d{4}',slide_range[di][i+1][1]).group(0) == slide_range[di][i][1]:
 					slide_tmp.append(punctuation)
 					punctuation = []
 					pre = j
 					break;
 
-				elif (slide_range[di][i+1][1] != re.search('\d{4}',name[di][j]).group(0)) and (j>=pre):#範囲がファイルの名前よりも小さい時に
+				elif re.search('\d{4}',slide_range[di][i+1][1]).group(0) <= re.search('\d{4}',name[di][j]).group(0):#この範囲の時に貯めていたものを吐き出す
+					slide_tmp.append(punctuation)
+					punctuation = []
+					pre = j
+					break;
+
+				elif (slide_range[di][i+1][1] > re.search('\d{4}',name[di][j]).group(0)) and (j>=pre):#範囲がファイルの名前よりも小さい時に
 					if space_flag == 1:
 						punctuation.append(slide_sentence[di][j].replace(" ",""))
 					else:
@@ -164,7 +172,7 @@ if __name__=="__main__":
 	# print len(slide[1][28])
 	# print len(slide[0]),len(slide[1]),len(slide[2])
 	for di in range(len(slide)):#日付文
-		print len(slide[di])
+		# print len(slide[di])
 		for i in range(len(slide[di])):#スライド文
 			# f.write("{0:03d}".format(out_num))
 			for j in range(len(slide[di][i])):#一スライドの中の細かい文
