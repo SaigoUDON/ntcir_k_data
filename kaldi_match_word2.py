@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import os
 import re
+import sys
 def get_file_contents(path):
 	files = os.listdir(path)
 	doc = []
@@ -44,7 +45,7 @@ if __name__=="__main__":
 	f = open("test.txt","w")
 
 	'スライドがどこまでか書く'
-	slide_classify = get_file_contents("/home/seko/ntcir11/ntcir_k_data/data/a1")
+	slide_classify = get_file_contents("/Users/murahashi/text_study/ntcir/ntcir_k_data/data/a1")
 	# print slide_classify[1]#slide_classify[a] a:07-01.align,08-21.align
 	# print len(slide_classify)
 	print "スライド範囲の取得"
@@ -86,7 +87,7 @@ if __name__=="__main__":
 	'スライドの内容'
 	name = []
 	date = []
-	slide_sentence, name ,date= get_file_name_contents("/home/seko/ntcir11/ntcir_k_data/data/kaldi_file1")
+	slide_sentence, name ,date= get_file_name_contents("/Users/murahashi/text_study/ntcir/ntcir_k_data/data/kaldi_file1")
 	# print date[-1]
 	# print len(name[0])
 	# print len(slide_sentence[0])
@@ -111,11 +112,11 @@ if __name__=="__main__":
 	for di in range(len(slide_range)):#フォルダの最後
 		for i in range(len(slide_range[di])-1):#
 			for j in range(len(name[di])):
-				# print i,j,slide_range[di][i]
+				print date[di],i,j,pre,slide_range[di][i][1]
 
 				#最後の部分
 				if i == len(slide_range[di])-2:
-					if j>=pre and j < len(name[di])-1:
+					if j>=pre and j < len(name[di])-1:#最後の上限まで繰り返し
 						if space_flag == 1:
 							punctuation.append(slide_sentence[di][j].replace(" ",""))
 							# print j,"bab",len(name[di])-1
@@ -127,18 +128,23 @@ if __name__=="__main__":
 					elif j>=pre and j== len(name[di])-1:
 						# print j,"non"
 						# print slide_sentence[di][j]
-						punctuation.append(slide_sentence[di][j].replace(" ",""))
-						slide_tmp.append(punctuation)#重要な文を入れる
+						#slide_tmp.append(punctuation)#重要な文を入れる
+						if space_flag == 1:
+							punctuation.append(slide_sentence[di][j].replace(" ",""))
+						else:
+							punctuation.append(slide_sentence[di][j])
+						slide_tmp.append(punctuation)
 						punctuation=[]
 						pre=0
 						break;
 					else:
 						# print "j",j,"pre",pre
 						continue
-				elif re.search('\+',slide_range[di][i+1][1]) and re.search('\d{4}',slide_range[di][i+1][1]).group(0) == slide_range[di][i][1]:
+
+				#中の部分+がついているものでそれがスライドの範囲より		
+				elif re.search('\+',slide_range[di][i+1][1]) and re.search('\d{4}',slide_range[di][i+1][1]).group(0) == re.search('\d{4}',slide_range[di][i][1]).group(0):
 					slide_tmp.append(punctuation)
 					punctuation = []
-					pre = j
 					break;
 
 				elif re.search('\d{4}',slide_range[di][i+1][1]).group(0) <= re.search('\d{4}',name[di][j]).group(0):#この範囲の時に貯めていたものを吐き出す
@@ -180,7 +186,7 @@ if __name__=="__main__":
 					# print i
 					continue
 				else:
-					dir_name = "/home/seko/ntcir11/ntcir_k_data/data/kaldi_data/"+date[m]+"_"+'{0:03d}'.format(out_num)
+					dir_name = "/Users/murahashi/text_study/ntcir/ntcir_k_data/data/kaldi_space_data/"+date[m]+"_"+'{0:03d}'.format(out_num)
 					f = open(dir_name+"kaldi.txt","aw")
 					f.write(str(slide[di][i][j]))
 					f.write("\n")
@@ -190,4 +196,4 @@ if __name__=="__main__":
 		m+=1
 
 	#フォルダを削除する
-	remove_none_file("/home/seko/ntcir11/ntcir_k_data/data/kaldi_data/")
+	remove_none_file("/Users/murahashi/text_study/ntcir/ntcir_k_data/data/kaldi_space_data")
